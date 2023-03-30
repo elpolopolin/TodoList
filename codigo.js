@@ -1,5 +1,5 @@
 var listado = [];
-var ids = 0;
+var ids = -1;
 
 function agregar()
 {    
@@ -15,10 +15,13 @@ function agregar()
         var obj ={
             id: ids,
             titulo: input,
-            realizado: false            
+            realizado: false,
+            fechaCreado: Date.now(),
+            fechaTachado: null 
         };
     
         listado.push(obj);
+        ReestablecerIds(listado)
         console.log(listado)
         // llamo a funcion refresh screen
         PintarEnPantalla();
@@ -31,23 +34,25 @@ function agregar()
 function PintarEnPantalla(){
    var pantalla = document.getElementById("tasks");
    pantalla.innerHTML = "";
-   listado.map (item=>{
-
-    if (item.realizado = true){
-        var ñ = "<del>";
-        var l = "</del>";
-    }
-
-    pantalla.innerHTML += `
+   listado.map(item=>{  
+    if(item.realizado == true){
+        pantalla.innerHTML += `
         <li>
-            <input type="checkbox" id="checkbox" onclick="realizar(${item.id})" />
-            ${ñ} ${item.titulo} ${l}
+                   
+            <li class="list-group-item list-group-item-success"> <p>  ${item.titulo}:  ${item.fechaTachado} <input type="checkbox" class="a" checked onchange="realizar(${item.id})">
+            <button class="btn btn-outline-danger"  onclick="borrar(${item.id})">Borrar</button> </p>  </li>
         </li>
-    `
-
+        `
+    }else{
+        pantalla.innerHTML += `
+        <li>
+                  
+        <p class=""> <li class="list-group-item">  ${item.titulo} <input type="checkbox" class="a" onchange="realizar(${item.id})"> <button class="btn btn-outline-danger" onclick="borrar(${item.id})">Borrar</button> </p> </li>
+        </li>
+        `
+    }      
 
    })
-  
 }
 
 function realizar(id)
@@ -55,13 +60,43 @@ function realizar(id)
     for (var i = 0; i < listado.length; i++)
     {
         if (listado[i].id == id){
-            listado.realizado = !listado.realizado;
+            if(listado[i].realizado == true){                               
+                listado[i].realizado = false;
+                listado[i].fechaTachado = null;
+            }else{                
+                listado[i].realizado = true;
+                listado[i].fechaTachado = Date.now();
+                
+            }
         }
     }
-
     PintarEnPantalla();
 }
 
+function borrar(id){
+    let nuevoArray = listado.filter(todo => todo.id != id);
+    listado = nuevoArray;
+
+    ReestablecerIds(listado);
+    PintarEnPantalla();
+
+
+}
+
+
+function ReestablecerIds(nuevoArray){
+    var auxiliar = 1
+    nuevoArray.map((TODO) =>{
+  
+        TODO.id = auxiliar
+      
+        
+        auxiliar++
+        
+        
+    });
+   
+  }
 
 
 
