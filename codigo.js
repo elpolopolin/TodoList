@@ -1,9 +1,11 @@
 var listado = [];
 var ids = -1;
 
+
 function agregar()
 {    
     var input =  document.getElementById("input").value;
+ 
     
     if (document.getElementById("input").value.length == 0)
     {
@@ -12,11 +14,12 @@ function agregar()
     }
     else {
         ids = ids+1;
+        var now = new Date().toLocaleTimeString('en-AR');
         var obj ={
             id: ids,
             titulo: input,
             realizado: false,
-            fechaCreado: Date.now(),
+            fechaCreado: now, 
             fechaTachado: null 
         };
     
@@ -39,17 +42,19 @@ function PintarEnPantalla(){
         pantalla.innerHTML += `
         <li>
                    
-            <li class="list-group-item list-group-item-success"> <p>  ${item.titulo}:  ${item.fechaTachado} <input type="checkbox" class="a" checked onchange="realizar(${item.id})">
-            <button class="btn btn-outline-danger"  onclick="borrar(${item.id})">Borrar</button> </p>  </li>
+            <li class="list-group-item list-group-item-success"> <p> <b> Tarea: </b> ${item.titulo} <b> Creado: </b> ${item.fechaCreado}  <b> Realizado: </b> ${item.fechaTachado} <input type="checkbox" class="a" checked onchange="realizar(${item.id})" >
+            <button class="btn btn-outline-danger"  onclick="borrar(${item.id})">Borrar</button>  </p>  </li>
         </li>
         `
     }else{
         pantalla.innerHTML += `
         <li>
                   
-        <p class=""> <li class="list-group-item">  ${item.titulo} <input type="checkbox" class="a" onchange="realizar(${item.id})"> <button class="btn btn-outline-danger" onclick="borrar(${item.id})">Borrar</button> </p> </li>
+        <p class=""> <li class="list-group-item">  ${item.titulo} ${item.fechaCreado}  <input type="checkbox" class="a" onchange="realizar(${item.id})"> <button class="btn btn-outline-danger" onclick="borrar(${item.id})">Borrar</button> </p> </li>
         </li>
+        
         `
+
     }      
 
    })
@@ -65,7 +70,8 @@ function realizar(id)
                 listado[i].fechaTachado = null;
             }else{                
                 listado[i].realizado = true;
-                listado[i].fechaTachado = Date.now();
+                var now = new Date().toLocaleTimeString('en-AR');
+                listado[i].fechaTachado = now;
                 
             }
         }
